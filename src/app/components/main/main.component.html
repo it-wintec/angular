@@ -1,0 +1,26 @@
+
+<mat-form-field>
+  <input matInput placeholder="Please enter your name" value="{name}" [(ngModel)]="name">
+</mat-form-field>
+<br>
+<mat-form-field>
+  <input matInput placeholder="Your City" value="{city}" [(ngModel)]="city">
+</mat-form-field>
+
+<p>
+  Your name is: <strong>{{ name }}</strong>
+</p>
+<p>
+  Your city is: <strong>{{ city }}</strong>
+</p>
+
+<div class="col-md-4">
+  <button mat-raised-button color="primary" (click)="getData()">click get data</button>
+  <button mat-raised-button color="primary" (click)="child.childMethod()">Parent Call Son</button>
+  <button mat-raised-button color="primary" (click)="changeServiceInfo()">edit service info</button>
+</div>
+
+
+<mat-icon>home</mat-icon>
+
+<app-footer #child [paramOne]='paramOneVal' [paramTwo]='paramTwoVal' (initEmit)="accept($event)"></app-footer>
