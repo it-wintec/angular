@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 
 @Component({
   selector: 'app-hero',
@@ -25,7 +25,10 @@ export class HeroComponent implements OnInit {
 
   getData() {
 
-    this.http.post(this.RESTUrl, null)
+    let params = new HttpParams();
+    params = params.append('type', 'HERO_READ');
+
+    this.http.post(this.RESTUrl, params)
       .subscribe(res => {
         console.log(res);
         if ('heroes' in res) {
@@ -36,21 +39,26 @@ export class HeroComponent implements OnInit {
 
   edit(obj) {
     this.curhero = obj;
-    this.isEdit = true;
+    this.isEdit = !this.isEdit;
   }
 
   delete(obj) {
-    let heroes = this.heroes;
-    heroes.forEach(function(item, key) {
-      console.log(item);
-      if (item.id == obj.id) {
-        heroes.splice(key, 1);
-      }
-    });
     this.isEdit = false;
+
+    let params = new HttpParams();
+    params = params.append('type', 'HERO_DELETE');
+    params = params.append('id', obj.id);
+    this.http.post(this.RESTUrl, params)
+      .subscribe(res => {
+        console.log(res);
+        this.getData();
+      }, error => {
+        console.log(error);
+      });
   }
 
   save() {
+    this.isEdit = false;
     let id = 1;
     let heroes = this.heroes;
     let name = this.name;
@@ -59,8 +67,32 @@ export class HeroComponent implements OnInit {
         id = item.id + 1;
       }
     });
-    heroes.push({ id: id, name: name });
-    this.isEdit = false;
+    let params = new HttpParams();
+    params = params.append('type', 'HERO_CREATE');
+    params = params.append('id', id.toString());
+    params = params.append('name', name);
+    this.http.post(this.RESTUrl, params)
+      .subscribe(res => {
+        console.log(res);
+        this.getData();
+      }, error => {
+        console.log(error);
+      });
+  }
+
+  update(){
+    let params = new HttpParams();
+    params = params.append('type', 'HERO_UPDATE');
+    params = params.append('id', this.curhero.id.toString());
+    params = params.append('name', this.curhero.name);
+    this.http.post(this.RESTUrl, params)
+      .subscribe(res => {
+        console.log(res);
+        this.getData();
+        this.isEdit = false;
+      }, error => {
+        console.log(error);
+      });
   }
 
 }
