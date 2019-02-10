@@ -15,16 +15,3 @@
 指令| ng g directive my-new-directive
 
 管道| ng g pipe my-new-pipe
-
-
-//angular-cli.json文件
-"environments": {
-    "loca": "environments/environment.ts",
-    "dev": "environments/environment.ts",
-    "prod": "environments/environment.prod.ts"
-}
-ng build --environment=loca
-ng build --environment=prod
-
-
-oiU87yUR4D
